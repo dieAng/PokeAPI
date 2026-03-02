@@ -1,0 +1,66 @@
+<ion-header [translucent]="true" class="ion-no-border">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/" text=""></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ details?.name | titlecase }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-card *ngIf="details" class="details-card">
+    <div class="header-image ion-text-center">
+      <img [src]="details.sprites.other['official-artwork'].front_default || details.sprites.front_default" />
+    </div>
+
+    <ion-card-header>
+      <ion-card-subtitle class="ion-text-center">
+        <span class="poke-id">#{{ details.id }}</span>
+      </ion-card-subtitle>
+      <ion-card-title class="ion-text-center">{{ details.name | titlecase }}</ion-card-title>
+
+      <div class="types-container ion-text-center ion-margin-top">
+        <ion-chip *ngFor="let t of details.types" [color]="getTypeColor(t.type.name)">
+          <ion-label>{{ t.type.name | titlecase }}</ion-label>
+        </ion-chip>
+      </div>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-list lines="none">
+        <ion-item>
+          <ion-icon name="resize-outline" slot="start" color="primary"></ion-icon>
+          <ion-label>Altura</ion-label>
+          <ion-note slot="end" color="dark" class="ion-text-bold">{{ details.height / 10 }} m</ion-note>
+        </ion-item>
+
+        <ion-item>
+          <ion-icon name="barbell-outline" slot="start" color="primary"></ion-icon>
+          <ion-label>Peso</ion-label>
+          <ion-note slot="end" color="dark" class="ion-text-bold">{{ details.weight / 10 }} kg</ion-note>
+        </ion-item>
+
+        <ion-item>
+          <ion-icon name="flash-outline" slot="start" color="primary"></ion-icon>
+          <ion-label>Habilidades</ion-label>
+          <div slot="end" class="abilities-list">
+            <span *ngFor="let a of details.abilities; let last = last">
+              {{ a.ability.name | titlecase }}<span *ngIf="!last">, </span>
+            </span>
+          </div>
+        </ion-item>
+      </ion-list>
+
+      <div class="stats-container ion-margin-top">
+        <h3 class="ion-padding-start">Estadísticas Base</h3>
+        <ion-list lines="none">
+          <ion-item *ngFor="let stat of details.stats">
+            <ion-label class="stat-name">{{ stat.stat.name | titlecase }}</ion-label>
+            <ion-progress-bar [value]="stat.base_stat / 200" [color]="getStatColor(stat.base_stat)"></ion-progress-bar>
+            <ion-note slot="end" class="stat-value">{{ stat.base_stat }}</ion-note>
+          </ion-item>
+        </ion-list>
+      </div>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
